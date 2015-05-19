@@ -47,6 +47,9 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
 @property (nonatomic, assign) BOOL showButtonLine;
 @property (nonatomic, assign) BOOL showBlurBackground;
+
++ (void)setBackgroundWindowColor:(UIColor*)color;
++ (void)setBackgroundWindowAlpha:(float)alpha;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;

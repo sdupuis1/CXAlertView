@@ -45,6 +45,8 @@ static BOOL __cx_alert_animating;
 static CXAlertBackgroundWindow *__cx_alert_background_window;
 static CXAlertView *__cx_alert_current_view;
 static BOOL __cx_statsu_prefersStatusBarHidden;
+static UIColor *__cx_alert_background_color;
+static float __cx_alert_background_alpha = -1;
 
 @interface CXTempViewController : UIViewController
 
@@ -81,7 +83,19 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [[UIColor colorWithWhite:0 alpha:0.5] set];
+    if(__cx_alert_background_color)
+    {
+        float alpha = 0.8;
+        if(__cx_alert_background_alpha != -1)
+        {
+            alpha = __cx_alert_background_alpha;
+        }
+        [[__cx_alert_background_color colorWithAlphaComponent:alpha] set];
+    }
+    else
+    {
+        [[UIColor colorWithWhite:0 alpha:0.5] set];
+    }
     CGContextFillRect(context, self.bounds);
 }
 
@@ -175,7 +189,14 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         appearance.shadowRadius = 8;
     });
 }
-
++ (void)setBackgroundWindowColor:(UIColor*)color
+{
+    __cx_alert_background_color = color;
+}
++ (void)setBackgroundWindowAlpha:(float)alpha
+{
+    __cx_alert_background_alpha = alpha;
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -399,6 +420,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         CGSize screenSize = [self currentScreenSize];
 
         __cx_alert_background_window = [[CXAlertBackgroundWindow alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)];
+        
     }
     
     [__cx_alert_background_window makeKeyAndVisible];
